@@ -52,6 +52,10 @@
 
     * { box-sizing: border-box; }
 
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: 700;
+    }
+
     html {
       margin: 0;
       padding: 0;
@@ -68,19 +72,20 @@
 
     .brandbar {
       position: fixed;
-      top: 30px;
+      top: 0;
       left: max(4vw, calc((100vw - 1240px) / 2));
       z-index: 30;
-      padding: 16px 20px;
+      padding: 20px 20px 20px;
       display: flex;
       align-items: center;
       justify-content: flex-start;
       gap: 14px;
-      border-radius: 14px;
+      border-radius: 0 0 14px 14px;
       border: 1px solid rgba(0, 0, 0, 0.12);
+      border-top: 0;
       background: #ffffff;
       backdrop-filter: blur(10px);
-      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+      /*box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);*/
     }
 
     .brandbar .logo {
@@ -88,6 +93,12 @@
       width: auto;
       display: block;
       filter: none;
+    }
+
+    .brandbar a {
+      display: inline-flex;
+      line-height: 0;
+      text-decoration: none;
     }
 
     .brandbar .fairtrade-logo {
@@ -252,6 +263,7 @@
       box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
       transition: opacity 700ms cubic-bezier(0.22, 1, 0.36, 1), transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
       will-change: transform, opacity;
+      --sat-glow: 210, 210, 210;
     }
 
     .sat-alert .sat-icon {
@@ -273,14 +285,15 @@
 
     .sat-alert.visible::before {
       opacity: 1;
+      animation: satLinePulse 4.8s ease-in-out 200ms infinite;
     }
 
     /* Danger: line from RIGHT side, angling down-right */
     .sat-alert.alert-danger::before {
-      top: 50%;
-      right: 0;
+      top: 100%;
+      left: 50%;
       height: 180px;
-      transform: rotate(25deg);
+      transform: translateX(-50%) rotate(-25deg);
       transform-origin: top center;
       background: linear-gradient(180deg, rgba(255, 220, 220, 0.8), rgba(255, 220, 220, 0.08));
       box-shadow: 0 4px 14px 3px rgba(255, 180, 180, 0.5);
@@ -288,10 +301,10 @@
 
     /* Warn: line from LEFT side, angling down-left */
     .sat-alert.alert-warn::before {
-      top: 50%;
-      left: 0;
+      top: 100%;
+      left: 50%;
       height: 140px;
-      transform: rotate(-20deg);
+      transform: translateX(-50%) rotate(20deg);
       transform-origin: top center;
       background: linear-gradient(180deg, rgba(230, 215, 245, 0.8), rgba(230, 215, 245, 0.08));
       box-shadow: 0 4px 14px 3px rgba(200, 180, 230, 0.5);
@@ -299,10 +312,10 @@
 
     /* Ok: line from RIGHT side, angling down-right */
     .sat-alert.alert-ok::before {
-      top: 50%;
-      right: 0;
+      top: 100%;
+      left: 50%;
       height: 120px;
-      transform: rotate(20deg);
+      transform: translateX(-50%) rotate(-10deg);
       transform-origin: top center;
       background: linear-gradient(180deg, rgba(212, 245, 220, 0.8), rgba(212, 245, 220, 0.08));
       box-shadow: 0 4px 14px 3px rgba(180, 230, 190, 0.5);
@@ -310,13 +323,13 @@
 
     .sat-alert.alert-danger {
       top: 30%;
-      right: 8%;
+      right: 1%;
       transform: perspective(600px) rotateX(18deg) rotateY(-25deg) rotateZ(4deg) scale(0.15);
     }
 
     .sat-alert.alert-warn {
       top: 48%;
-      right: 32%;
+      right: 24%;
       transform: perspective(600px) rotateX(-12deg) rotateY(20deg) rotateZ(-6deg) scale(0.15);
     }
 
@@ -332,29 +345,57 @@
 
     .sat-alert.alert-danger.visible {
       transform: perspective(600px) rotateX(4deg) rotateY(-8deg) rotateZ(2deg) scale(1);
+      animation: satBadgePulse 4.8s ease-in-out 200ms infinite;
     }
 
     .sat-alert.alert-warn.visible {
       transform: perspective(600px) rotateX(-3deg) rotateY(6deg) rotateZ(-2deg) scale(1);
+      animation: satBadgePulse 4.8s ease-in-out 200ms infinite;
     }
 
     .sat-alert.alert-ok.visible {
       transform: perspective(600px) rotateX(2deg) rotateY(-4deg) rotateZ(1deg) scale(1);
+      animation: satBadgePulse 4.8s ease-in-out 200ms infinite;
     }
 
     .sat-alert.alert-danger {
       background: rgba(255, 220, 220, 0.92);
       color: #c62828;
+      --sat-glow: 255, 180, 180;
     }
 
     .sat-alert.alert-ok {
       background: rgba(212, 245, 220, 0.92);
       color: #1b5e20;
+      --sat-glow: 180, 230, 190;
     }
 
     .sat-alert.alert-warn {
       background: rgba(230, 215, 245, 0.92);
       color: #6a1b9a;
+      --sat-glow: 200, 180, 230;
+    }
+
+    @keyframes satBadgePulse {
+      0%,
+      100% {
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3), 0 0 18px 4px rgba(var(--sat-glow), 0.26);
+      }
+      50% {
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3), 0 0 38px 12px rgba(var(--sat-glow), 0.58);
+      }
+    }
+
+    @keyframes satLinePulse {
+      0%,
+      100% {
+        opacity: 0.94;
+        filter: drop-shadow(0 0 8px rgba(var(--sat-glow), 0.45));
+      }
+      50% {
+        opacity: 1;
+        filter: drop-shadow(0 0 18px rgba(var(--sat-glow), 0.88));
+      }
     }
 
     .scene-metric::after {
@@ -460,24 +501,51 @@
       text-shadow: 0 10px 26px rgba(0, 0, 0, 0.34);
     }
 
-    .impact-lede strong {
+    .impact-lede .impact-word {
       color: #ffffff;
-      font-weight: 800;
+      font-weight: inherit;
       transition: opacity 380ms ease, transform 380ms ease, text-shadow 380ms ease;
     }
 
     .impact-word {
       display: inline-block;
-      opacity: 0.45;
+      opacity: 1;
       transform: translateY(0px);
       text-shadow: none;
     }
 
-    .scene-impact.emphasis-months .impact-word.months,
     .scene-impact.emphasis-days .impact-word.days {
-      opacity: 1;
       transform: translateY(-2px);
       text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+    }
+
+    .months-phrase {
+      position: relative;
+      display: inline;
+      white-space: nowrap;
+      opacity: 1;
+      transition: opacity 420ms ease 100ms;
+    }
+
+    .scene-impact.emphasis-days .months-phrase {
+      opacity: 0.5;
+    }
+
+    .months-phrase::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 48%;
+      height: 3px;
+      width: 0;
+      background: rgba(255, 255, 255, 0.82);
+      border-radius: 2px;
+      transform: translateY(-50%);
+      transition: width 520ms cubic-bezier(0.4, 0, 0.2, 1) 180ms;
+    }
+
+    .scene-impact.emphasis-days .months-phrase::after {
+      width: 100%;
     }
 
     .impact-proof {
@@ -496,15 +564,16 @@
       line-height: 0.95;
       letter-spacing: -0.02em;
       color: #ffffff;
-      font-weight: 800;
       text-transform: uppercase;
     }
 
     .impact-proof-compliance span {
       font-size: 0.5em;
+      padding-left: 10px;
       letter-spacing: 0.03em;
-      font-weight: 500;
+      font-weight: 400;
       vertical-align: baseline;
+      text-transform: none;
     }
 
     .impact-proof-divider {
@@ -534,9 +603,10 @@
 
     .impact-proof-suffix {
       font-size: clamp(1.3rem, 3vw, 2rem);
-      font-weight: 700;
+      font-weight: 400;
       color: #ffffff;
       letter-spacing: -0.01em;
+      padding-left: 10px;
     }
 
     .impact-proof-text {
@@ -556,7 +626,7 @@
     }
 
     .scene-flowbeat .scene-body strong {
-      color: #4BA82E;
+      color: #D4FF47;
       font-weight: 700;
     }
 
@@ -863,6 +933,24 @@
       grid-template-columns: auto 1fr;
       gap: 0 clamp(20px, 2.5vw, 32px);
       max-width: 820px;
+      position: relative;
+    }
+
+    .testimonial::before {
+      content: "\201D";
+      position: absolute;
+      top: 2px;
+      left: calc(clamp(64px, 7vw, 88px) - 8px);
+      transform: translateX(-50%);
+      display: block;
+      font-size: clamp(3.8rem, 7.2vw, 5.2rem);
+      line-height: 0.7;
+      font-family: Georgia, "Times New Roman", serif;
+      color: #ffffff;
+      font-weight: 700;
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35);
+      z-index: 3;
+      pointer-events: none;
     }
 
     .testimonial-avatar {
@@ -886,13 +974,7 @@
     }
 
     .testimonial blockquote::before {
-      content: "\201C";
-      font-size: 1.6em;
-      line-height: 0;
-      vertical-align: -0.2em;
-      margin-right: 2px;
-      color: rgba(243, 247, 242, 0.35);
-      font-weight: 700;
+      content: none;
     }
 
     .testimonial-meta {
@@ -1010,7 +1092,7 @@
       .brandbar {
         left: 4vw;
         gap: 10px;
-        padding: 8px 10px;
+        padding: 10px 10px 14px;
       }
 
       .brandbar .logo {
@@ -1050,9 +1132,11 @@
 </head>
 <body>
   <header class="brandbar" aria-label="Fairtrade and Zure brand bar">
-    <img class="logo fairtrade-logo" src="Images/FT-Logo.png" alt="Fairtrade logo" />
+    <a href="https://www.fairtrade.net" target="_blank" rel="noopener noreferrer" aria-label="Visit Fairtrade website">
+      <img class="logo fairtrade-logo" src="Images/FT-Logo.png" alt="Fairtrade logo" />
+    </a>
     <span class="x" aria-hidden="true"></span>
-    <span class="zure-wrap"><img class="logo zure-logo" src="Images/Zure_logo_black_RGB.png" alt="Zure logo" /></span>
+    <a class="zure-wrap" href="https://www.zure.com" target="_blank" rel="noopener noreferrer" aria-label="Visit Zure website"><img class="logo zure-logo" src="Images/Zure_logo_black_RGB.png" alt="Zure logo" /></a>
   </header>
 
   <main class="story">
@@ -1075,7 +1159,7 @@
         <img src="Images/cocoa-forest.png" alt="Forest canopy and cocoa landscape" />
       </div>
       <div class="scene-copy">
-        <h2 class="impact-lede">From <strong class="impact-word months">Months</strong> of work to <strong class="impact-word days">Days</strong> of work.</h2>
+        <h2 class="impact-lede"><span class="months-phrase"><span class="impact-word months">Months</span> of work</span> to <span class="impact-word days">Days</span> of work.</h2>
         <div class="impact-proof" aria-label="Outcome metric">
           <p class="impact-proof-compliance">100% <span>EUDR compliant</span></p>
           <p class="impact-proof-text impact-proof-subtext">Turning regulatory compliance into competitive advantage</p>
@@ -1085,7 +1169,7 @@
             <span class="impact-proof-suffix">reduction</span>
           </div>
           <p class="impact-proof-text">
-            in start-to-end time for users moving from upload to validated and compliant results.
+            in start-to-end time for users to get results.
           </p>
         </div>
       </div>
@@ -1216,9 +1300,9 @@
       <div class="scene-copy">
         <!--<h2>Fairtrade 🌳 Zure--><h2>Technology  + <br>Human impact.</h2>
         <p>
-          If your business is looking to create impact at scale, let’s talk about how we can help you get there.
+          If your business is looking to create an impact, <br>let’s talk about how we can help you get there.
         </p>
-        <a href="#">➜ Let's make an impact</a>
+        <a href="#">➜ Let's discuss your project</a>
       </div>
     </section>
   </main>
@@ -1229,7 +1313,7 @@
     <div class="contact-dialog">
       <button class="contact-dialog-close" id="contactClose" aria-label="Close">&times;</button>
       <div id="contactFormWrap">
-        <h3>Want to make an impact?</h3>
+        <h3>Want to make a splash with us?</h3>
         <form id="contactForm" novalidate>
           <div class="contact-field">
             <label for="cf-name">Name</label>
