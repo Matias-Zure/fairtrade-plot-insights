@@ -667,24 +667,6 @@
       display: block;
     }
 
-    .flow-node figcaption {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      margin: 0;
-      padding: 12px 16px;
-      font-family: "NHaasGrotesk", "Segoe UI", sans-serif;
-      font-size: 0.78rem;
-      letter-spacing: 0.04em;
-      color: rgba(248, 251, 247, 0.92);
-      background: rgba(7, 11, 15, 0.55);
-      backdrop-filter: blur(6px);
-      z-index: 3;
-      opacity: 0;
-      transition: opacity 400ms ease;
-    }
-
     .flow-node.queued {
       z-index: 0;
       opacity: 0.15;
@@ -701,11 +683,6 @@
       z-index: 2;
       opacity: 1;
       transform: none;
-    }
-
-    .flow-node.active figcaption {
-      opacity: 1;
-      transition-delay: 600ms;
     }
 
     .flow-node.active img {
@@ -1142,14 +1119,17 @@
   <main class="story">
     <section class="scene hero in-view" data-scene="1">
       <div class="scene-media">
+        <!--
         <video autoplay muted loop playsinline>
           <source src="Images/river-video.mp4" type="video/mp4" />
         </video>
+        -->
+        <img src="Images/hero-img.jpg" alt="Aerial view of river through forest" />
       </div>
       <div class="scene-copy">
-        <h1 class="hero-title">Equipping 1000+ Producers to Protect Forests</h1>
-        <p class="hero-sub">
-          Fairtrade's mission is to create a more equitable and sustainable world. To protect forests, they need to empower producers with better tools and data.
+        <h1 class="hero-title">Equipping ~1000 Farmer Cooperatives to Protect Forests</h1>
+        <p class="hero-sub">  
+          Providing cocoa & coffee farmer cooperatives with automation tools and data insights for a more equitable and sustainable world.
         </p>
       </div>
     </section>
@@ -1161,9 +1141,6 @@
       <div class="scene-copy">
         <h2 class="impact-lede"><span class="months-phrase"><span class="impact-word months">Months</span> of work</span> to <span class="impact-word days">Days</span> of work.</h2>
         <div class="impact-proof" aria-label="Outcome metric">
-          <p class="impact-proof-compliance">100% <span>EUDR compliant</span></p>
-          <p class="impact-proof-text impact-proof-subtext">Turning regulatory compliance into competitive advantage</p>
-          <hr class="impact-proof-divider" />
           <div class="impact-proof-row">
             <p class="impact-proof-number">0%</p>
             <span class="impact-proof-suffix">reduction</span>
@@ -1181,10 +1158,11 @@
       </div>
       <div class="scene-copy">
         <h2 class="scene-title"> 
-          Producers are the front line of forest protection.
+          Farmers are the front line of forest protection.
         </h2>
         <p class="scene-body">
-          They need to efficiently manage and verify thousands of farm plots, ensuring compliance with environmental standards while supporting their communities' livelihoods.
+          ~1 million farmers need to efficiently map and manage ~2,5 million hectares of farm plots, 
+          to support EU Deforestation Regulation readiness. All while supporting their communities' livelihoods.
         </p>
       </div>
     </section>
@@ -1201,15 +1179,15 @@
         </h2>
         <div class="metric-grid" aria-label="Program scale metrics">
           <div class="metric-item">
-            <p class="metric-value">1000+</p>
-            <p class="metric-label">Producer organizations across regions</p>
+            <p class="metric-value">36</p>
+            <p class="metric-label">Certified cocoa & coffee countries across 3 continents</p>
           </div>
           <div class="metric-item">
-            <p class="metric-value">100k+</p>
+            <p class="metric-value">&gt; 1 million</p>
             <p class="metric-label">Farm plots needing validated geodata</p>
           </div>
           <div class="metric-item">
-            <p class="metric-value">30+</p>
+            <p class="metric-value">20+</p>
             <p class="metric-label">Automated quality checks replacing manual review</p>
           </div>
         </div>
@@ -1224,21 +1202,21 @@
         <div>
           <h2 class="scene-title">One shared operating view.</h2>
           <p class="scene-body">
-            By digitizing the plot verification workflow and integrating satellite monitoring, we created <strong>a unified platform</strong> that turns complex geospatial data into clear, actionable insights. Producers and auditors can collaborate efficiently and proactively manage deforestation risk at scale.
+            By digitizing the plot validation workflow and integrating satellite monitoring, 
+            we created <strong>a unified platform</strong> that turns complex geospatial data 
+            into clear, actionable insights. Producers and their trade partners can collaborate efficiently 
+            and proactively manage deforestation risk at scale.
           </p>
         </div>
         <div class="flow-stage" aria-label="Workflow sequence from upload to review and risk response">
           <figure class="flow-node">
             <img src="Images/Plot-insights-dashboard.png" alt="Shared dashboard as central operating view" />
-            <figcaption>Validated data shared with importers for EU submission</figcaption>
           </figure>
           <figure class="flow-node">
             <img src="Images/Plot-insights-upload.png" alt="Plot upload step" />
-            <figcaption>Producer organizations upload farm plot data in their preferred format</figcaption>
           </figure>
           <figure class="flow-node">
             <img src="Images/Plot-insights-alerts.png" alt="Alerts and action step" />
-            <figcaption>Deforestation risk assessed for each plot using real satellite imagery</figcaption>
           </figure>
         </div>
       </div>
@@ -1262,7 +1240,8 @@
       <div class="scene-copy">
         <h2 class="scene-title">Satellite intelligence turns deforestation risk into action.</h2>
         <p class="scene-body">
-          By integrating satellite-based monitoring, every plot is continuously assessed against deforestation indicators — giving producers and auditors a shared, evidence-based view of environmental risk before it becomes a compliance failure.
+          By integrating satellite-based monitoring, every plot is continuously assessed against deforestation indicators — 
+          giving producers an evidence-based view of environmental risk before the coffee & cocoa product enters the market.
         </p>
       </div>
     </section>
