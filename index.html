@@ -156,8 +156,12 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transform: scale(1.03);
+      transform: scale(1);
       filter: saturate(1.06) contrast(1.05);
+    }
+
+    .scene-media.satellite img {
+      filter: saturate(1.06) contrast(1.35);
     }
 
     .scene::after {
@@ -165,7 +169,7 @@
       position: absolute;
       inset: 0;
       z-index: 1;
-      background: linear-gradient(180deg, rgba(8, 12, 16, 0.24), rgba(8, 12, 16, 0.35) 42%, rgba(8, 12, 16, 0.84));
+      background: linear-gradient(180deg, rgba(8, 12, 16, 0), rgba(8, 12, 16, 0.35) 42%, rgba(8, 12, 16, 0.7));
     }
 
     .scene-copy {
@@ -200,6 +204,24 @@
       font-size: clamp(1.08rem, 2vw, 1.34rem);
       line-height: 1.6;
       color: var(--ink-soft);
+    }
+
+    .scene.hero .scene-media img {
+      transform: scale(1.05);
+      animation: heroSkyDrift 26s ease-in-out infinite alternate;
+      will-change: transform;
+    }
+
+    @keyframes heroSkyDrift {
+      0% {
+        transform: scale(1.08) translateY(-1.6%);
+      }
+      50% {
+        transform: scale(1.08) translateY(1.6%);
+      }
+      100% {
+        transform: scale(1.08) translateY(-1.6%);
+      }
     }
 
     .scene-title {
@@ -399,7 +421,7 @@
     }
 
     .scene-metric::after {
-      background: linear-gradient(180deg, rgba(7, 10, 14, 0.34), rgba(7, 10, 14, 0.52), rgba(7, 10, 14, 0.88));
+      background: linear-gradient(180deg, rgba(8, 12, 16, 0), rgba(8, 12, 16, 0.35) 42%, rgba(8, 12, 16, 0.7))
     }
 
     .scene-metric .scene-copy {
@@ -466,14 +488,14 @@
 
     .metric-label {
       margin: 0;
-      max-width: 18ch;
+      max-width: 24ch;
       font-size: clamp(1rem, 1.6vw, 1.16rem);
       line-height: 1.45;
       color: var(--ink-soft);
     }
 
     .scene-impact::after {
-      background: linear-gradient(180deg, rgba(9, 13, 16, 0.2), rgba(9, 13, 16, 0.42), rgba(9, 13, 16, 0.9));
+      background: linear-gradient(180deg, rgba(8, 12, 16, 0), rgba(8, 12, 16, 0.35) 42%, rgba(8, 12, 16, 0.7))
     }
 
     .scene-impact {
@@ -515,7 +537,7 @@
     }
 
     .scene-impact.emphasis-days .impact-word.days {
-      transform: translateY(-2px);
+      transform: translateY(0);
       text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
     }
 
@@ -555,7 +577,7 @@
       padding: clamp(18px, 2vw, 28px);
       backdrop-filter: blur(7px);
       justify-self: end;
-      width: min(520px, 100%);
+      width: min(420px, 100%);
     }
 
     .impact-proof-compliance {
@@ -622,12 +644,12 @@
     }
 
     .scene-flowbeat::after {
-      background: linear-gradient(180deg, rgba(8, 12, 16, 0.34), rgba(8, 12, 16, 0.58) 44%, rgba(8, 12, 16, 0.9));
+      background: linear-gradient(180deg, rgba(8, 12, 16, 0), rgba(8, 12, 16, 0.35) 42%, rgba(8, 12, 16, 0.7))
     }
 
-    .scene-flowbeat .scene-body strong {
+    .scene-body .flow-highlight {
       color: #D4FF47;
-      font-weight: 700;
+      font-weight: inherit;
     }
 
     .scene-flowbeat .scene-copy {
@@ -925,7 +947,6 @@
       font-family: Georgia, "Times New Roman", serif;
       color: #ffffff;
       font-weight: 700;
-      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35);
       z-index: 3;
       pointer-events: none;
     }
@@ -1136,7 +1157,7 @@
 
     <section class="scene scene-impact" data-scene="2">
       <div class="scene-media parallax" data-speed="0.1">
-        <img src="Images/cocoa-forest.png" alt="Forest canopy and cocoa landscape" />
+        <img src="Images/forest.jpg" alt="Person working on a farm" />
       </div>
       <div class="scene-copy">
         <h2 class="impact-lede"><span class="months-phrase"><span class="impact-word months">Months</span> of work</span> to <span class="impact-word days">Days</span> of work.</h2>
@@ -1154,14 +1175,14 @@
 
     <section class="scene scene-right" data-scene="3">
       <div class="scene-media parallax" data-speed="0.16">
-        <img src="Images/fairtrade-cocoa-farmers.png" alt="Cocoa producers in the field" />
+        <img src="Images/farmer.jpg" alt="Cocoa producer in the field" />
       </div>
       <div class="scene-copy">
         <h2 class="scene-title"> 
           Farmers are the front line of forest protection.
         </h2>
         <p class="scene-body">
-          ~1 million farmers need to efficiently map and manage ~2,5 million hectares of farm plots, 
+          <span class="flow-highlight">~1 million Fairtrade farmers</span> need to efficiently map and manage <span class="flow-highlight">~2,5 million hectares</span> of farm plots, 
           to support EU Deforestation Regulation readiness. All while supporting their communities' livelihoods.
         </p>
       </div>
@@ -1203,7 +1224,7 @@
           <h2 class="scene-title">One shared operating view.</h2>
           <p class="scene-body">
             By digitizing the plot validation workflow and integrating satellite monitoring, 
-            we created <strong>a unified platform</strong> that turns complex geospatial data 
+            we created <span class="flow-highlight">a unified platform</span> that turns complex geospatial data 
             into clear, actionable insights. Producers and their trade partners can collaborate efficiently 
             and proactively manage deforestation risk at scale.
           </p>
@@ -1223,8 +1244,8 @@
     </section>
 
     <section class="scene scene-alt" data-scene="6">
-      <div class="scene-media parallax" data-speed="0.13">
-        <img src="Images/aerial-view.jpg" alt="Aerial coffee farm" />
+      <div class="scene-media parallax satellite" data-speed="0.13">
+        <img src="Images/aerial-view.jpg" alt="Aerial view" />
       </div>
       <div class="sat-alerts" aria-label="Satellite monitoring alerts">
         <div class="sat-alert alert-danger" data-delay="1000">
@@ -1240,7 +1261,7 @@
       <div class="scene-copy">
         <h2 class="scene-title">Satellite intelligence turns deforestation risk into action.</h2>
         <p class="scene-body">
-          By integrating satellite-based monitoring, every plot is continuously assessed against deforestation indicators — 
+          By integrating satellite-based monitoring, every plot is continuously assessed against deforestation indicators - 
           giving producers an evidence-based view of environmental risk before the coffee & cocoa product enters the market.
         </p>
       </div>
