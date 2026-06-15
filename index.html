@@ -1123,12 +1123,14 @@
       gap: clamp(20px, 3vw, 40px);
       align-items: start;
       width: 100%;
+      min-height: clamp(420px, 56vh, 640px);
     }
 
     .closing-left {
       display: flex;
       flex-direction: column;
       gap: 0;
+      align-self: center;
     }
 
     .closing-left h2 {
@@ -1150,12 +1152,66 @@
       max-height: 0;
       overflow: hidden;
       opacity: 0;
-      transition: max-height 0.4s ease, opacity 0.4s ease;
+      align-self: start;
+      transform: translateY(12px);
+      transition: max-height 0.55s ease, opacity 0.35s ease, transform 0.35s ease;
     }
 
     .closing-form-wrapper.open {
-      max-height: 1000px;
+      max-height: 1400px;
       opacity: 1;
+      transform: translateY(0);
+    }
+
+    .closing-form-wrapper.loading .hubspot-form-wrap {
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+    }
+
+    .closing-form-wrapper.ready .hubspot-form-wrap {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .form-loading {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+      padding: 14px 16px;
+      border-radius: 8px;
+      background: rgba(0, 167, 225, 0.12);
+      border: 1px solid rgba(0, 167, 225, 0.35);
+      color: #d9f5ff;
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+
+    .closing-form-wrapper.loading .form-loading {
+      display: inline-flex;
+    }
+
+    .form-loading-spinner {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid rgba(217, 245, 255, 0.28);
+      border-top-color: #9de7ff;
+      animation: formSpin 0.9s linear infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes formSpin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    #contactCta[aria-busy="true"] {
+      opacity: 0.82;
+      pointer-events: none;
     }
 
     .contact-dialog--hubspot {
@@ -1164,6 +1220,9 @@
 
     .hubspot-form-wrap {
       min-height: 420px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.28s ease, transform 0.28s ease;
     }
 
     /* ── HubSpot Form Styling ── */
@@ -1343,7 +1402,7 @@
     .hubspot-form-wrap .hs-richtext p,
     .hubspot-form-wrap .hs-richtext span {
       font-family: "NHaasGrotesk", "Segoe UI", sans-serif;
-      font-size: 0.95rem;
+      font-size: 0.85rem;
       line-height: 1.45;
       color: var(--ink);
       font-weight: 400;
@@ -1391,6 +1450,11 @@
       background: transparent;
       transform: none;
       box-shadow: none;
+    }
+
+    .legal-consent-container .hs-form-booleancheckbox-display>span {
+     margin-left: 30px !important;
+      font-weight: 700; 
     }
 
     /* Remove the list bullet marker from consent checkbox rows */
@@ -1443,6 +1507,11 @@
       .closing-content {
         grid-template-columns: 1fr;
         gap: clamp(16px, 2vw, 24px);
+      }
+
+      .closing-left,
+      .closing-form-wrapper {
+        align-self: start;
       }
 
       .closing-form-wrapper {
@@ -1675,7 +1744,11 @@
             </p>
             <a id="contactCta" href="#">➜ Let's discuss your project</a><br>
           </div>
-          <div class="closing-form-wrapper" id="closingFormWrapper">
+          <div class="closing-form-wrapper" id="closingFormWrapper" aria-hidden="true">
+            <div class="form-loading" id="hubspotLoading" role="status" aria-live="polite">
+              <span class="form-loading-spinner" aria-hidden="true"></span>
+              <span>Loading form...</span>
+            </div>
             <div id="hubspotFormHost" class="hubspot-form-wrap"></div>
           </div>
         </div>
@@ -1899,6 +1972,7 @@
 
     let hubspotScriptPromise = null;
     let hubspotFormLoaded = false;
+    let hubspotFormInitPromise = null;
 
     const loadHubspotScript = () => {
       if (window.hbspt) return Promise.resolve();
@@ -1919,37 +1993,81 @@
 
     const ensureHubspotForm = async () => {
       if (hubspotFormLoaded) return;
-      await loadHubspotScript();
-      if (!window.hbspt || !hubspotFormHost) return;
+      if (hubspotFormInitPromise) return hubspotFormInitPromise;
 
-      window.hbspt.forms.create({
-        portalId: '143587615',
-        formId: '76c113cc-6b05-4dad-b2e4-16c54279c3fd',
-        region: 'eu1',
-        target: '#hubspotFormHost'
-      });
+      hubspotFormInitPromise = (async () => {
+        await loadHubspotScript();
+        if (!window.hbspt || !hubspotFormHost) {
+          throw new Error('HubSpot library unavailable');
+        }
 
-      hubspotFormLoaded = true;
+        await new Promise((resolve, reject) => {
+          const readyTimeout = window.setTimeout(() => {
+            reject(new Error('HubSpot form timed out'));
+          }, 12000);
+
+          window.hbspt.forms.create({
+            portalId: '143587615',
+            formId: '76c113cc-6b05-4dad-b2e4-16c54279c3fd',
+            region: 'eu1',
+            target: '#hubspotFormHost',
+            onFormReady: () => {
+              window.clearTimeout(readyTimeout);
+              hubspotFormLoaded = true;
+              resolve();
+            }
+          });
+        });
+      })();
+
+      return hubspotFormInitPromise;
     };
 
     const openHubspotDialog = async (e) => {
       e.preventDefault();
-      if (!closingFormWrapper) return;
+      if (!closingFormWrapper || !contactCta) return;
 
       closingFormWrapper.classList.add('open');
+      closingFormWrapper.classList.remove('ready');
+      closingFormWrapper.classList.add('loading');
+      closingFormWrapper.setAttribute('aria-hidden', 'false');
+      hubspotFormHost.setAttribute('aria-busy', 'true');
+      contactCta.setAttribute('aria-busy', 'true');
 
       try {
         await ensureHubspotForm();
+        closingFormWrapper.classList.remove('loading');
+        closingFormWrapper.classList.add('ready');
+        hubspotFormHost.removeAttribute('aria-busy');
       } catch (err) {
+        closingFormWrapper.classList.remove('loading');
         if (hubspotFormHost && !hubspotFormLoaded) {
           hubspotFormHost.textContent = 'Failed to load the HubSpot form. Please try again.';
+          hubspotFormHost.style.opacity = '1';
+          hubspotFormHost.style.transform = 'none';
         }
+      } finally {
+        contactCta.removeAttribute('aria-busy');
       }
 
       if (window.innerWidth <= 820) {
         closingFormWrapper.scrollIntoView({ behavior: getScrollBehavior(), block: 'start' });
       }
     };
+
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(() => {
+        loadHubspotScript().catch(() => {
+          // Ignore warm-up failures; regular click flow has full error handling.
+        });
+      }, { timeout: 3000 });
+    } else {
+      setTimeout(() => {
+        loadHubspotScript().catch(() => {
+          // Ignore warm-up failures; regular click flow has full error handling.
+        });
+      }, 1200);
+    }
 
     contactCta.addEventListener('click', openHubspotDialog);
   </script>
